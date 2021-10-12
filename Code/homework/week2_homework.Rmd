@@ -1,0 +1,90 @@
+
+---
+title: "week2_homework"
+author: "Hanyu Zhao"
+date: "12/10/2021"
+
+output: 
+  html_document:
+    toc: true
+    toc_depth: 3
+    toc_float: true    
+    number_sections: true
+---
+
+# Useful Functions
+
+Create a vector
+
+```{r, eval=FALSE}
+c()
+```
+
+Return the length of a vector
+
+```{r, eval=FALSE}
+length()
+```
+
+Check the names of a vector or add names to a vector
+
+```{r, eval=FALSE}
+names()
+```
+
+Sort a vector by value
+
+```{r, eval=FALSE}
+sort()
+```
+
+Make a vector into a factor
+
+```{r, eval=FALSE}
+as.factor()
+```
+
+Generate random numbers from a uniform distribution
+
+```{r, eval=FALSE}
+runif()
+```
+
+Add up the values of a vector
+
+```{r, eval=FALSE}
+sum()
+```
+
+Calculate the average of the values of a vector
+
+```{r, eval=FALSE}
+mean()
+```
+
+Round a vector to the nearest...
+
+```{r, eval=FALSE}
+round()
+```
+
+Square root of the values in a vector
+
+```{r, eval=FALSE}
+sqrt()
+```
+
+Create a function
+
+```{r, eval=FALSE}
+function()
+```
+
+Return the desire object from a function
+
+```{r, eval=FALSE}
+return()
+```
+
+
+# TBC...
