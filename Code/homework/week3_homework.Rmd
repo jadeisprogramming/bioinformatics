@@ -1,0 +1,53 @@
+---
+title: "Week3_Homework"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Task 1
+*load to_sort_pop_1.csv and to_sort_pop_1.csv from bioinformatics_data on github.
+```{r}
+##load vroom
+library(vroom)
+##read in the data files
+sort_pop_1 <- vroom("C:/Users/bw21167/Desktop/bioinformatics/Data/to_sort_pop_1.csv")
+sort_pop_2 <- vroom("C:/Users/bw21167/Desktop/bioinformatics/Data/to_sort_pop_2.csv")
+```
+## Task 2
+*these two data are shown as below:
+```{r}
+sort_pop_1
+sort_pop_2
+```
+The first four columns should be self explanatory (the species binomial, and the primary, secondary, and tertiary threat each species is being threatened by). The rest of the columns specify the population counts for given dates.
+
+## Task 3
+*using tidyverse join both of these data together into a single tibble
+```{r}
+##load the tidyverse
+library("tidyverse")
+##use full_join to join these data into a single tibble as sort_pop
+sort_pop <- full_join(sort_pop_1, sort_pop_2)
+##look at sort_pop
+sort_pop
+```
+
+## Task 4
+*reshape them from wide to long format
+```{r}
+##our data frame
+sort_pop_long <- sort_pop %>%
+  ##and then apply this function to shape data from wide to long format
+  ##keep the four columns: species; primary_threat; secondary_threat; tertiary_threat
+  ##and add population, date and abundance
+  pivot_longer(cols = -c(species:tertiary_threat),
+               names_to = c("population", "date"),
+               names_pattern = "(.*)_(.*)",
+               values_drop_na = F,
+               values_to = "abundance")
+##look at the long format data
+sort_pop_long
+```
