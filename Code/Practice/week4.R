@@ -221,3 +221,20 @@ sel_country_plot + geom_line(aes(linetype = Country.Region))
 ##set line shape by country
 sel_country_plot + geom_point(aes(shape = Country.Region))
 
+##facet the data by country:
+sel_country_plot + geom_line() + facet_wrap(. ~ Country.Region)
+##facet the data by country:
+sel_country_plot + geom_line(aes(col = Country.Region)) + facet_wrap(. ~ Country.Region)
+
+##specify the directory and name of the pdf, and the width and height
+pdf("C:/Users/bw21167/Desktop/Bioinformatics/Plots/Deaths by country.pdf", width = 6, height = 4)
+
+##run your code to print your plot
+sel_country_plot + 
+  ##add lines
+  geom_line(aes(col = Country.Region)) + 
+  ##add facets
+  facet_wrap(. ~ Country.Region)
+
+##stop the pdf function and finish the .pdf file
+dev.off()
