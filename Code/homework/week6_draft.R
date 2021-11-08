@@ -1,0 +1,81 @@
+##load vroom
+library(vroom)
+##use vroom to read in medal table data from github:
+tokyo_medal_list <- vroom("https://raw.githubusercontent.com/chrit88/Bioinformatics_data/master/Workshop%205/Tokyo%202021%20medals.csv")
+
+##load tidyverse
+library(tidyverse)
+##load wbstats
+library(wbstats)
+##get GDP data
+GDP <- wb_data(indicator = "NY.GDP.MKTP.CD",
+               start_date = 2019,
+               end_date = 2019)
+##load country code
+library(countrycode)
+##add country code to tokyo medal table
+tokyo_medal_list$iso3c <- countrycode(tokyo_medal_list$Country,
+                                            origin = "country.name",
+                                            destination = "iso3c")
+##correct China
+tokyo_medal_list$iso3c[2] <- "CHN"
+##add Position to tokyo medal table
+tokyo_medal_list$Position <- 1:length(tokyo_medal_list$Country)
+##merge the GDP data into the medal table
+tokyo_medal_list <- left_join(tokyo_medal_list, GDP, by = "iso3c")
+
+##visualise the relation between GDP and position in the table
+p1 <- ggplot(tokyo_medal_list, aes(x=NY.GDP.MKTP.CD, y=Position))+
+  geom_point()+
+  theme_bw()
+p1
+##try to fit a glm
+mod1 <- glm(NY.GDP.MKTP.CD ~ Position,
+            data = tokyo_medal_list,
+            family = gaussian)
+plot(mod1)
+##try another one
+mod2 <- glm(log10(NY.GDP.MKTP.CD) ~ log10(Position),
+            data = tokyo_medal_list)
+plot(mod2)
+##mod2 looks better
+
+##re-plot the data
+p2 <- ggplot(tokyo_medal_list, aes(x=NY.GDP.MKTP.CD, y=Position))+
+  geom_point()+
+  theme_bw()+
+  scale_x_continuous(trans = "log10")+
+  scale_y_continuous(trans = "log10")+
+  ggtitle("logged data")
+p2
+##look at the summary
+summary(mod2)
+
+##load the iris data set
+data("iris")
+##visualise the data
+p3 <- ggplot(iris, aes(x=Petal.Length, y=Petal.Width, col=Species)) +
+  geom_point()+
+  theme_bw()
+p3
+##try to fit a glm
+mod3 <- glm(Petal.Width ~ Petal.Length*Species, data = iris)
+plot(mod3)
+##try transformation of response variable: log10()
+mod4 <- glm(log10(Petal.Width) ~Petal.Length*Species, data = iris)
+plot(mod4)
+##looks bad
+
+##try another transformation: sqrt()
+mod5 <- glm(sqrt(Petal.Width) ~ Petal.Length*Species, data = iris)
+plot(mod5)
+##looks good
+
+##look at the summary
+summary(mod5)
+
+##Conclusion:
+##the value of intercept is significant(*)
+##there is a significant effect of Petal.Length on Petal.width(**)
+##Petal.width changes between species with a significant effect of versicolor(*) or virginica(***)
+##but Petal.length of different species has no significant effect on Petal.width
